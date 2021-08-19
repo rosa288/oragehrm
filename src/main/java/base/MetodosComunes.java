@@ -1,16 +1,30 @@
 package base;
 
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.testng.Reporter;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 public class MetodosComunes {
 	//metodo de inicializas 1. variable de clase
 	WebDriver driver;
+	String baseUrl;
+	WebElement element;
+	
+	@BeforeMethod
 	
 	public void inicializarExplorador (String URL, String explorador) {
 		switch (explorador) {
@@ -50,6 +64,41 @@ public class MetodosComunes {
 		}// se cierra swicht
 	}//se cierra inicializador
 	
+	@Test
+	
+	public void ingresarTexto(WebElement buscar, String texto ) {
+		buscar.clear();
+		buscar.sendKeys(texto);
+		buscar.sendKeys(Keys.ENTER);
+		Reporter.log("El texto que vas a mandar = " + texto, true);
+	}
+	
+	public void click(WebElement click ) {
+		click.click();
+		Reporter.log("Se le dio click " , true);
+		
+	}
+	public void scroll (WebElement scroll) {
+		((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();", scroll);
+		Reporter.log("se le dio scroll al elemento", true);
+	}
+	
+	
+	public void testUnitled() throws Exception {
+		driver.get(baseUrl);
+		element = driver.findElement(By.id("Ist-ib"));
+		element.sendKeys("Selenium WebDriver Interview questions");
+		element.sendKeys(Keys.RETURN);
+		List<WebElement>list = driver.findElements(By.className("_Rm"));
+		System.out.println(list.size());
+	}
+	
+	
+	@AfterMethod
+	
+	public void tearDown() throws Exception {
+		driver.quit();
+		}
 	
 	
 
